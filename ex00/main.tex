@@ -1,0 +1,120 @@
+\documentclass[11pt]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xspace}
+\usepackage[a4paper,lmargin={2cm},rmargin={2cm},tmargin={2.5cm},bmargin = {2.5cm},headheight = {4cm}]{geometry}
+\usepackage{amsmath,amssymb,amstext,amsthm}
+\usepackage[shortlabels]{enumitem}
+\usepackage[headsepline]{scrlayer-scrpage} 
+\pagestyle{scrheadings} 
+\usepackage{titling}
+\usepackage{etoolbox}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows, calc, automata, arrows.meta, positioning,decorations.pathmorphing,backgrounds,decorations.markings,decorations.pathreplacing, graphs}
+
+\tikzset{% 
+    initial text={},
+    state/.style={circle, draw, minimum size=.6cm},
+    every initial by arrow/.style={-stealth},
+    every loop/.append style={-stealth},
+    >=stealth
+}
+
+\ohead{\theauthor}
+\ihead{Introduction to Artificial Intelligence, Spring 2022, Sheet \thesheetnr}
+
+% Sheet number
+\newcounter{sheetnr}
+\newcommand{\sheetnr}[1]{\setcounter{sheetnr}{#1}}
+
+% Exercise environments
+\newenvironment{exercise}[2][]{\section*{Exercise \thesheetnr.#2\expandafter\ifstrempty\expandafter{#1}{}{\ (#1)}}}{}
+\newenvironment{subexercises}{\begin{enumerate}[a), font=\bfseries, wide, labelindent=0pt]}{\end{enumerate}}
+\newenvironment{subsubexercises}{\begin{enumerate}[i), font=\bfseries, wide, labelindent=0pt]}{\end{enumerate}}
+
+
+
+%% Examples
+\newcommand{\Reach}{\problem{Reach}}
+
+
+% Anpassen --> %
+\author{Oliver Strassmann \\
+        Julia Kostadinova \\
+        Alessio Brazerol}
+\sheetnr{1}
+% <-- Anpassen %
+
+\begin{document}
+
+\begin{exercise}[AI Systems/Technology]{1}
+    \begin{subexercises}
+        \item writing weather forecast reports \\ 
+        It is possible to write convincing essay's as OpenAi's GTP-3 language generator showed. It should be possible to convert this to weather forecast reports. https://www.theguardian.com/commentisfree/2020/sep/08/robot-wrote-this-article-gpt-3
+        \item playing StarCraft II \\
+        Deepminds program AlphaStar was able to defeat a professional player.
+        https://deepmind.com/blog/article/alphastar-mastering-real-time-strategy-game-starcraft-ii
+        \item proving a mathematical theorem \\
+        There are programs that can solve basic theorems of mathematics. https://mathscholar.org/2019/04/google-ai-system-proves-over-1200-mathematical-theorems/
+        
+    \end{subexercises}
+\end{exercise}
+
+\begin{exercise}[Rationality]{2}
+    This depends on the performance measure, if taking the scenic route maximizes it under the given information and precept history the self-driving taxi behaves rationally.
+\end{exercise}
+
+\begin{exercise}[Task Environments]{3}
+    \begin{subexercises}
+        \item Tetris \\
+        \begin{itemize}
+            \item fully observable, because the whole play field is visible.
+            \item single-agent, as there is no other player (for standard singleplayer tetris)
+            \item deterministic, it is clear what effect an action has, e.g right-arrow move the piece to the right.
+            \item sequential, as there are multiple dependent steps needed to win or delete rows. 
+            \item dynamic, the falling piece continues to fall even when the agent is contemplating.
+            \item discrete, the state (position) of the pieces is given by discrete numbers.
+            
+        \end{itemize}
+        \item a group of robots dancing synchronously \\
+        \begin{itemize}
+            \item partially observable, there may be object obstructed from view
+            \item multi-agent, as the dancing agents need to communicate to synchronize with each other
+            \item non-deterministic, as we deal with a real world scenario, there can be unforeseen effects, such as a human kicking the robot.
+            \item sequential, to complete the dance multiple dependent steps are required.
+            \item dynamic, as the world or dance goes on while the robot thinks
+            \item continuous, small changes can affect the synchronicity or necessary parameters.  
+            
+        \end{itemize}
+    \end{subexercises}
+        
+\end{exercise}
+    
+\begin{exercise}[Reflexive Agent]{4}
+\begin{subexercises}
+        \item The idea is to track around the outer wall, this can be accomplished with this agent function. \\
+        \begin{center}
+        \begin{tabular}{ |c|c|c| } 
+            \hline
+            North Cell & West Cell & Action \\ 
+            \hline
+            empty & full  & move forward\\ 
+            * & empty & turn left plus move forward \\ 
+            full & full & turn right\\
+            
+            \hline
+        \end{tabular}
+\end{center}
+\item If the turn action fails, it is possible that we do not move in the right direction for the third action, percept sequence pair. If the exit is in that left turn, the agent will exhaust all other ways and should then return to the beginning. If we assume that south of the start is a full square, the agent should turn and begin anew. Thus, it should still be possible to find the exist even tough much less efficient. The same should be true if the wall sensors are faulty, under the assumption that the agent doesn't get destroyed when it crashes into a wall.
+\end{subexercises}
+    
+\end{exercise}
+
+
+
+\end{document}
