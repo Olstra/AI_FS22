@@ -15,6 +15,15 @@ class SearchNode:
         self.parent = parent
         self.g = g
 
+    def __lt__(self, other):
+        return self.g == other.g
+
+    def __le__(self, other):
+        return self.g == other.g
+
+    def __eq__(self, other):
+        return self.g == other.g
+
 
 class Search:
     def __init__(self, search_problem, print_statistics=False):
