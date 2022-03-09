@@ -1,3 +1,10 @@
+#
+# Introduction to Artificial Intelligence, Spring 2022, Sheet 2
+# Oliver Strassmann, Julia Kostadinova, Alessio Brazerol
+#
+# Exercise 2.4 - Search Algorithms: Programming
+#
+
 import search_problem
 import time
 
