@@ -52,7 +52,7 @@
 
 \begin{document}
 
-	\begin{exercise}[Heuristics]{1}
+		\begin{exercise}[Heuristics]{1}
         \begin{subexercises}
             \item The wolf, goat, cabbage problem can be     described as:
             The farmer can move with or without an object (wolf, goat, cabbage) from one side of the river the another side if
@@ -67,7 +67,7 @@
             \end{itemize}
             If we once again describe a state as a vector $s = (s_1, s_2, s_3, s_4) \in \{0,1\}^4$. And also only look at valid states in the original problem (states that do not invalidate any restrictions). We say, that $s_1$ describes the position of the farmer, $s_2$ the position of the wolf, $s_3$ the position of the goat, and $s_4$ the position of the cabbage. A $"1"$ indicates that the farmer or object is on the starting shore, a $"0"$ indicates that it is on the goal shore. So for example, the state $s=(0,1,0,1)$ describes the state where the farmer and the goat are on the goal shore and the wolf and the cabbage still on the starting shore. \\
             
-            We can then define a heuristic $h$ that describes the minimal number of passages needed for the farmer to bring every object to the goal shore. \\
+            We can then define a heuristic $h$ that describes the minimal number of passages needed for the farmer to bring every object to the goal shore. 
             
             \begin{center}
                 \item $h(n) = 
@@ -89,12 +89,12 @@
                 $h(n) \leq c(n,a,n') + h(n')$
             \end{center}
         
-            \item We have to show that the triangle equation applies. $c(n,a,n') = 1$ as we are counting actions, and the cost of doing one action is $1$. To accept the triangle equation $h(n')$ can not change by more that $1$ so we have to show $||h(n') - h(n)|| \leq 1$. We can reduce this to two cases:
+            \item We have to show that the triangle equation holds. Because we are counting actions, and the cost of doing one action is $1$, $c(n,a,n') = 1$ for all actions and nodes. This means that for the triangle equation to hold, $h(n')$ can not change by more than $1$ so we have to show $||h(n') - h(n)|| \leq 1$. We can reduce this to two cases:
             \begin{itemize}
                 \item If just the farmer changes side, everything except $n_1$ is constant. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. \\
                 $||h(n') - h(n)|| = ||(1 - {n'}_1) + 2(n_2 + n_3 + n_4) - 1) - ((1 - n_1) + 2(n_2 + n_3 + n_4) - 1)|| = ||n_1 - {n'}_1|| \leq 1$ \\
-                \item If the farmer and a object $i$ changes site, 
-                everything except $n_1$ and $n_i $ are constant also $n_1 = n_i$ as both change to the same site. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. We choose, $x_i = 2$, as it is equivalent for any of the other $x_i$ with $1 < i \leq 4$ as they are symmetric. \\
+                \item If the farmer and a object $i$ changes side, 
+                everything except $n_1$ and $n_i $ are constant also $n_1 = n_i$ as both change to the same side. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. We choose, $n_i = n_2$, as it is equivalent for any of the other $x_i$ with $1 < i \leq 4$ as they are symmetric. \\
                 $||h(n') - h(n)|| = ||(1 - {n'}_1) + 2({n'}_1 + n_3 + n_4) - 1) - ((1 - n_1) + 2(n_1 + n_3 + n_4) - 1)|| = ||n_1 - {n'}_1 + 2{n'}_1 - 2n_1 || = || {n'}_1 - n_1 || \leq 1$ \\
             \end{itemize}
         
