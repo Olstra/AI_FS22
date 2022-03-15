@@ -62,7 +62,44 @@
 \end{exercise}
 
 \begin{exercise}[Informed Search Algorithms: Practice]{2}
-   
+\begin{subexercises}
+\item A* without reopening  \\
+
+\begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=10mm}] 
+\centering
+%NODES
+
+\node[roundnode] (basel) {Basel \\ 38=0+38};
+\node[roundnode] (olten)[below=of basel] {Olten\\ 99=48+51};
+\node[roundnode] (baden)  [below=of basel,right=of olten] {Baden\\ 108=70+38};
+
+\node[roundnode] (aarau) [below=of olten] {Aarau \\ 106=62+44};
+\node[roundnode] (basel1) [below=of olten, right=of aarau] {Basel \\ 179=96+83};
+\node[roundnode] (luzern) [below=of olten, right=of basel1] {Luzern \\ 124=103+21};
+
+\node[roundnode] (olten1) [below=of aarau] {Olten \\ 127=76+51};
+\node[roundnode] (baden1) [below=of aarau, right=of olten1] {Baden \\ 127=89+38};
+\node[roundnode] (luzern1) [below=of aarau, right=of baden1] {Luzern \\ 133=112+21};
+
+\node[roundnode] (olten2) [below=of luzern, right=of luzern1] {Olten \\ 209=158+51};
+\node[roundnode] (aarau2) [below=of luzern, right=of olten2] {Aarau \\ 197=153+44};
+\node[roundnode] (zug) [below=of luzern, right=of aarau2] {Zug \\ 142=142+0};
+
+
+%LINES
+\draw[-](basel.south) --(olten.north);
+\draw[-](basel.south) --(baden.north);
+\draw[-](olten.south) --(aarau.north);
+\draw[-](olten.south) --(luzern.north);
+\draw[-](olten.south) --(basel1.north);
+\draw[-](aarau.south) --(olten1.north);
+\draw[-](aarau.south) --(baden1.north);
+\draw[-](aarau.south) --(luzern1.north);
+\draw[-](luzern.south) --(olten2.north);
+\draw[-](luzern.south) --(aarau2.north);
+
+\end{tikzpicture}
+\end{subexercises}   
 \end{exercise}
 
 
