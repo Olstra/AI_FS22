@@ -65,25 +65,38 @@
 \begin{subexercises}
 \item A* without reopening  \\
 
-\begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=10mm}] 
-\centering
+\begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=8mm,node distance=17pt, scale=0.8}] 
+
 %NODES
 
-\node[roundnode] (basel) {Basel \\ 38=0+38};
-\node[roundnode] (olten)[below=of basel] {Olten\\ 99=48+51};
-\node[roundnode] (baden)  [below=of basel,right=of olten] {Baden\\ 108=70+38};
+\node[roundnode] (basel)  {1 \\ Basel \\ f=38 \\ g=0 \\ h=83};
+\node[roundnode] (olten)[below=of basel] {2 \\ Olten\\ f=99 \\ g=48 \\ h=51};
+\node[roundnode] (baden)  [below=of basel, right=of olten] {4 \\ Baden\\ f=108 \\\ g=70 \\ h=38};
 
-\node[roundnode] (aarau) [below=of olten] {Aarau \\ 106=62+44};
-\node[roundnode] (basel1) [below=of olten, right=of aarau] {Basel \\ 179=96+83};
-\node[roundnode] (luzern) [below=of olten, right=of basel1] {Luzern \\ 124=103+21};
+\node[roundnode] (aarau) [below=of olten] {3 \\ Aarau \\ f=106 \\ g=62 \\ h=44};
+\node[roundnode] (basel1) [below=of olten, left=of aarau] {\\ Basel \\ f=179 \\ g=96 \\ h=83};
+\node[roundnode] (luzern) [below=of olten, left=of basel1] {6 \\ Luzern \\ f=124  \\ g=103 \\ h=21};
 
-\node[roundnode] (olten1) [below=of aarau] {Olten \\ 127=76+51};
-\node[roundnode] (baden1) [below=of aarau, right=of olten1] {Baden \\ 127=89+38};
-\node[roundnode] (luzern1) [below=of aarau, right=of baden1] {Luzern \\ 133=112+21};
+\node[roundnode] (luzern1) [below=of aarau] {\\ Luzern \\ f=133 \\ g=112 \\ h=21};
+\node[roundnode] (olten1) [below=of aarau, left=of luzern1] {\\ Olten \\ f=127 \\ g=76 \\ h=51};
+\node[roundnode] (baden1) [below=of aarau, right=of luzern1] {\\ Baden \\ f=127 \\ g=89 \\ h=38};
 
-\node[roundnode] (olten2) [below=of luzern, right=of luzern1] {Olten \\ 209=158+51};
-\node[roundnode] (aarau2) [below=of luzern, right=of olten2] {Aarau \\ 197=153+44};
-\node[roundnode] (zug) [below=of luzern, right=of aarau2] {Zug \\ 142=142+0};
+
+%Expand from Baden
+\node[roundnode] (aarau1) [below=of baden] {\\ Aarau \\ f=141 \\ g=97 \\ h=44};
+\node[roundnode] (zurich) [below=of baden, right=of aarau1] {5 \\ Zürich \\ f=117 \\ g=94 \\ h=23};
+\node[roundnode] (basel2) [below=of baden, right=of zurich] {\\ Basel \\ f=223 \\ g=140 \\ h=83};
+
+
+%Expand from Zürich
+\node[roundnode] (baden2) [below=of zurich] {\\ Baden \\ f=156 \\ g=118 \\ h=38};
+\node[roundnode] (zug1) [below=of zurich, right=of baden2] {7 \\ Zug \\ f=126 \\ g=126 \\ h=0};
+
+
+%Expand from Lucerne
+\node[roundnode] (olten2) [below=of luzern] {\\ Olten \\ f=209 \\ g=158 \\ h=51};
+\node[roundnode] (aarau2) [below=of luzern, left=of olten2] {\\ Aarau \\ f=197 \\ g=153 \\ h=44};
+\node[roundnode] (zug) [below=of luzern, left=of aarau2] {\\ Zug \\ f=133 \\  g=133 \\ h=0};
 
 
 %LINES
@@ -97,7 +110,16 @@
 \draw[-](aarau.south) --(luzern1.north);
 \draw[-](luzern.south) --(olten2.north);
 \draw[-](luzern.south) --(aarau2.north);
-
+\draw[-](luzern.south) --(zug.north);
+\draw[-](baden.south) --(aarau1.north);
+\draw[-](baden.south) --(zurich.north);
+\draw[-](baden.south) --(basel2.north);
+\draw[-](zurich.south)--(baden2.north);
+\draw[-](zurich.south)--(zug1.north);
+\
+\end{tikzpicture}
+\item Greedy Best First Search Algorithm \\
+\begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=8mm,node distance=10pt}] 
 \end{tikzpicture}
 \end{subexercises}   
 \end{exercise}
