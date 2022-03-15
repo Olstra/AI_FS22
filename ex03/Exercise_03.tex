@@ -52,7 +52,7 @@
 
 \begin{document}
 
-\begin{exercise}[Heuristics]{1}
+	\begin{exercise}[Heuristics]{1}
         \begin{subexercises}
             \item The wolf, goat, cabbage problem can be     described as:
             The farmer can move with or without an object (wolf, goat, cabbage) from one side of the river the another side if
@@ -83,14 +83,24 @@
                 \item $2(n_2 + n_3 + n_4) - 1$: for each object he brings from the starting shore he has to travel back except for the last one he brings to the other side.
             \end{itemize}
         
-            \item The heuristic is admissible as it can't overestimate the cost to reach the goal. To move an object in the real problem the farmer has to at least make one turn or two if he is on the wrong shore. As we are counting these actions but without regard for restriction 2. and 3. which both introduce additional cost by requiring that we bringing some objects back to the starting shore we are guaranteed to be less or at most equal to the optimal cost.
-            
-            
-            \item The heuristic is consistent, this is because $c(n,a,n') = 1$ and $h(n')$ can only decrease by at most $1$ this is because we are counting the minimal number of moves the farmer has to make. So $c(n,a,n') + h(n')$ must be at least as large as $h(n)$.
+            \item Our heuristic is defined to calculate the optimal number of actions in the simplified search problem. Thus obviously $h(n) = h^*(n)$, and therefore admissible in the simplified search problem. Thus in the original search problem $h(n) \leq h^*(n)$ and therefore admissible.
         
             \begin{center}
                 $h(n) \leq c(n,a,n') + h(n')$
             \end{center}
+        
+            \item We have to show that the triangle equation applies. $c(n,a,n') = 1$ as we are counting actions, and the cost of doing one action is $1$. To accept the triangle equation $h(n')$ can not change by more that $1$ so we have to show $||h(n') - h(n)|| \leq 1$. We can reduce this to two cases:
+            \begin{itemize}
+                \item If just the farmer changes side, everything except $n_1$ is constant. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. \\
+                $||h(n') - h(n)|| = ||(1 - {n'}_1) + 2(n_2 + n_3 + n_4) - 1) - ((1 - n_1) + 2(n_2 + n_3 + n_4) - 1)|| = ||n_1 - {n'}_1|| \leq 1$ \\
+                \item If the farmer and a object $i$ changes site, 
+                everything except $n_1$ and $n_i $ are constant also $n_1 = n_i$ as both change to the same site. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. We choose, $x_i = 2$, as it is equivalent for any of the other $x_i$ with $1 \leq i < 4$ as they are symmetric. \\
+                $||h(n') - h(n)|| = ||(1 - {n'}_1) + 2({n'}_1 + n_3 + n_4) - 1) - ((1 - n_1) + 2(n_1 + n_3 + n_4) - 1)|| = ||n_1 - {n'}_1 + 2{n'}_1 - 2n_1 || = || n_1 - {n'}_1 || = 1$ \\
+            \end{itemize}
+        
+            $\implies ||h(n') - h(n)|| \leq 1 \implies h(n)$ is consistent.
+        
+            
         
         
         \end{subexercises}
