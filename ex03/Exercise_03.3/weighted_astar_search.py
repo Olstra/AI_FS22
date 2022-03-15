@@ -32,17 +32,19 @@ class WeightedAStarSearch(Search):
         if prob.is_goal(current_node):
             return [prob.initial_state], 0
 
+        frontier = PriorityQueue()
+        frontier.put(SearchNode(current_node, None, 0))
         # add initial state to queue and to dictionary
-        frontier = [SearchNode(current_node, None, 0)]
+        #frontier = [SearchNode(current_node, None, 0)]
 
         reached = {current_node}
 
         # loop for children
         prev_cost = current_node
-        while frontier:
+        while not frontier.empty():
             # remove from frontier because it was already reached.
 
-            current_node = frontier.pop()
+            current_node = frontier.get()
 
             self.expanded += 1
             reached.add(current_node.state)
@@ -61,17 +63,17 @@ class WeightedAStarSearch(Search):
                 successor_node = SearchNode(pot_successor_state, current_node, g, f)
                 # only add if node was not already reached
                 if successor_node.state not in reached:
-                    frontier.append(successor_node)
+                    frontier.put(successor_node)
                     self.generated += 1
 
-            frontier.sort(key=lambda x: x.g, reverse=True)
+            #frontier.sort(key=lambda x: x.g, reverse=True)
 
         return None, None
 
 
 if __name__ == "__main__":
     problem = pancake_problem.generate_random_problem(5)
-    problem = PancakeProblem((1, 5, 6, 2, 4, 3))
+    problem = PancakeProblem((7, 8, 4, 1, 2, 9, 3, 6, 5, 10))
     problem.dump()
     astar = WeightedAStarSearch(problem, 1, print_statistics=True)
     astar.run()

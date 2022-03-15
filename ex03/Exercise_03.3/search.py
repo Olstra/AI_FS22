@@ -16,6 +16,15 @@ class SearchNode:
         self.g = g
         self.f = f
 
+    def __lt__(self, other):
+        return self.f == other.f
+
+    def __le__(self, other):
+        return self.f == other.f
+
+    def __eq__(self, other):
+        return self.f == other.f
+
 
 class Search:
     def __init__(self, search_problem, print_statistics=False):
