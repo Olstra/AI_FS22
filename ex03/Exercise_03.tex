@@ -53,13 +53,48 @@
 \begin{document}
 
 \begin{exercise}[Heuristics]{1}
-    \begin{subexercises}
-        \item Defintion of Heuristic  \\ 
-        \item Admissible Heuristic  \\
-        \item Consitent Heuristic \\ 
-       
-    \end{subexercises}
-\end{exercise}
+        \begin{subexercises}
+            \item The wolf, goat, cabbage problem can be     described as:
+            The farmer can move with or without an object (wolf, goat, cabbage) from one side of the river the another side if
+            \begin{itemize}
+                \item[1.] the farmer and the object are on the same side of the river,
+                \item[2.] the wolf and the goat are not both on the opposite side of the farmer after moving
+                \item[3.] the goat and the cabbage are not both on the opposite side of the farmer after moving
+            \end{itemize}
+                We can generate a new related problem:
+            \begin{itemize}
+                \item The farmer can move the objects or nothing from one side of the river to another side if the farmer and the object are on the same side of the river.
+            \end{itemize}
+            If we once again describe a state as a vector $s = (s_1, s_2, s_3, s_4) \in \{0,1\}^4$. And also only look at valid states in the original problem (states that do not invalidate any restrictions). We say, that $s_1$ describes the position of the farmer, $s_2$ the position of the wolf, $s_3$ the position of the goat, and $s_4$ the position of the cabbage. A $"1"$ indicates that the farmer or object is on the starting shore, a $"0"$ indicates that it is on the goal shore. So for example, the state $s=(0,1,0,1)$ describes the state where the farmer and the goat are on the goal shore and the wolf and the cabbage still on the starting shore. \\
+            
+            We can then define a heuristic $h$ that describes the minimal number of passages needed for the farmer to bring every object to the goal shore. \\
+            
+            \begin{center}
+                \item $h(n) = 
+                    \begin{cases}
+                        0,& \text{if } n = (0,0,0,0)\\
+                        1,& \text{if } n = (1,0,0,0)\\ 
+                        (1 - n_1) + 2(n_2 + n_3 + n_4) - 1,& \text{otherwise}
+                    \end{cases}$ \\
+            \end{center}
+            
+            \begin{itemize}
+                \item $(1-n_1) = 1$ when the farmer is on the goal shore and thus has to go back and get another object from the starting shore. $(1-n_1) = 0$ if he is already on the starting shore and thus doesn't have to travel back to the starting shore to get another object.
+                \item $2(n_2 + n_3 + n_4) - 1$: for each object he brings from the starting shore he has to travel back except for the last one he brings to the other side.
+            \end{itemize}
+        
+            \item The heuristic is admissible as it can't overestimate the cost to reach the goal. To move an object in the real problem the farmer has to at least make one turn or two if he is on the wrong shore. As we are counting these actions but without regard for restriction 2. and 3. which both introduce additional cost by requiring that we bringing some objects back to the starting shore we are guaranteed to be less or at most equal to the optimal cost.
+            
+            
+            \item The heuristic is consistent, this is because $c(n,a,n') = 1$ and $h(n')$ can only decrease by at most $1$ this is because we are counting the minimal number of moves the farmer has to make. So $c(n,a,n') + h(n')$ must be at least as large as $h(n)$.
+        
+            \begin{center}
+                $h(n) \leq c(n,a,n') + h(n')$
+            \end{center}
+        
+        
+        \end{subexercises}
+    \end{exercise}
 
 \begin{exercise}[Informed Search Algorithms: Practice]{2}
 \begin{subexercises}
