@@ -17,7 +17,7 @@ SIMPLE_PANCAKE_PROBLEMS = [
   (4, 1, 2, 5, 7, 3, 6),
   (6, 4, 3, 8, 7, 1, 2, 5),
   (7, 9, 8, 6, 1, 2, 5, 3, 4),
-  #(7, 8, 4, 1, 2, 9, 3, 6, 5, 10),
+  (7, 8, 4, 1, 2, 9, 3, 6, 5, 10),
 ]
 
 HARD_PANCAKE_PROBLEMS = [
@@ -72,7 +72,6 @@ def run_informed_searches(problem):
         wastar.run()
     except TimeLimitExceededError as e:
       print("Exceeded time limit of 3 minutes...")
-
 
 for init in SIMPLE_PANCAKE_PROBLEMS:
   problem = PancakeProblem(init)

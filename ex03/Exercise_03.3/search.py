@@ -17,10 +17,10 @@ class SearchNode:
         self.f = f
 
     def __lt__(self, other):
-        return self.f == other.f
+        return self.f < other.f
 
     def __le__(self, other):
-        return self.f == other.f
+        return self.f <= other.f
 
     def __eq__(self, other):
         return self.f == other.f
