@@ -63,8 +63,8 @@
 
 \begin{exercise}[Informed Search Algorithms: Practice]{2}
 \begin{subexercises}
-\item A* without reopening  \\
-
+\item A* without reopening  \\\\
+The numbers on the nodes denote the order in which they would be expanded.\\
 \begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=8mm,node distance=17pt, scale=0.8}] 
 
 %NODES
@@ -119,11 +119,40 @@
 \
 \end{tikzpicture}
 \item Greedy Best First Search Algorithm \\
-\begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=8mm,node distance=10pt}] 
+
+\begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=8mm,node distance=15pt}] 
+\node[roundnode] (basel)  {1 \\ Basel \\ h=83};
+\node[roundnode] (olten)[below=of basel] {  \\ Olten \\ h=51};
+\node[roundnode] (baden)  [below=of basel, right=of olten] {2 \\ Baden\\ h=38};
+\draw[-](basel.south) --(olten.north);
+\draw[-](basel.south) --(baden.north);
+
+%Expand from Baden
+\node[roundnode] (aarau1) [below=of baden] {\\ Aarau \\ h=44};
+\node[roundnode] (zurich) [below=of baden, right=of aarau1] {3 \\ Zürich \\ h=23};
+\node[roundnode] (basel2) [below=of baden, right=of zurich] {\\ Basel \\ h=83};
+\draw[-](baden.south) --(aarau1.north);
+\draw[-](baden.south) --(zurich.north);
+\draw[-](baden.south) --(basel2.north);
+
+%Expand from Zürich
+\node[roundnode] (baden2) [below=of zurich] {\\ Baden \\ h=38};
+\node[roundnode] (zug1) [below=of zurich, right=of baden2] {4 \\ Zug \\ h=0};
+\draw[-](zurich.south)--(baden2.north);
+\draw[-](zurich.south)--(zug1.north);
+
 \end{tikzpicture}
+\item Comparison \\
+\\In this case it is visible that the heuristics were chosen well, such that the greedy algorithm was faster while generating less nodes and still arriving to the optimal solution. The Greedy-Best-First-Search Algorithm only guarantees to arrive to a solution, but it is not guaranteed to find the optimal solution, but rather the first one it finds.
 \end{subexercises}   
 \end{exercise}
-
+\begin{exercise}[Informed Search Programming]{3}
+    \begin{subexercises}
+ 
+        \item [b)] Analysis \\ 
+       
+    \end{subexercises}
+\end{exercise}
 
 
 
