@@ -1,0 +1,275 @@
+\documentclass[11pt]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xspace}
+\usepackage[a4paper,lmargin={2cm},rmargin={2cm},tmargin={2.5cm},bmargin = {2.5cm},headheight = {4cm}]{geometry}
+\usepackage{amsmath,amssymb,amstext,amsthm}
+\usepackage[shortlabels]{enumitem}
+\usepackage[headsepline]{scrlayer-scrpage} 
+\pagestyle{scrheadings} 
+\usepackage{titling}
+\usepackage{etoolbox}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{shapes, arrows, calc, automata, arrows.meta, positioning,decorations.pathmorphing,backgrounds,decorations.markings,decorations.pathreplacing, graphs}
+
+\tikzset{% 
+    initial text={},
+    state/.style={circle, draw, minimum size=.6cm},
+    every initial by arrow/.style={-stealth},
+    every loop/.append style={-stealth},
+    >=stealth
+}
+
+\ohead{\theauthor}
+\ihead{Introduction to Artificial Intelligence, Spring 2022, Sheet \thesheetnr}
+
+% Sheet number
+\newcounter{sheetnr}
+\newcommand{\sheetnr}[1]{\setcounter{sheetnr}{#1}}
+
+% Exercise environments
+\newenvironment{exercise}[2][]{\section*{Exercise \thesheetnr.#2\expandafter\ifstrempty\expandafter{#1}{}{\ (#1)}}}{}
+\newenvironment{subexercises}{\begin{enumerate}[a), font=\bfseries, wide, labelindent=0pt]}{\end{enumerate}}
+\newenvironment{subsubexercises}{\begin{enumerate}[i), font=\bfseries, wide, labelindent=0pt]}{\end{enumerate}}
+
+
+
+%% Examples
+\newcommand{\Reach}{\problem{Reach}}
+
+
+% Anpassen --> %
+\author{Oliver Strassmann \\
+        Julia Kostadinova \\
+        Alessio Brazerol}
+\sheetnr{3}
+% <-- Anpassen %
+
+\begin{document}
+
+		\begin{exercise}[Heuristics]{1}
+        \begin{subexercises}
+            \item The wolf, goat, cabbage problem can be     described as:
+            The farmer can move with or without an object (wolf, goat, cabbage) from one side of the river the another side if
+            \begin{itemize}
+                \item[1.] the farmer and the object are on the same side of the river,
+                \item[2.] the wolf and the goat are not both on the opposite side of the farmer after moving
+                \item[3.] the goat and the cabbage are not both on the opposite side of the farmer after moving
+            \end{itemize}
+                We can generate a new related problem:
+            \begin{itemize}
+                \item The farmer can move the objects or nothing from one side of the river to another side if the farmer and the object are on the same side of the river.
+            \end{itemize}
+            If we once again describe a state as a vector $s = (s_1, s_2, s_3, s_4) \in \{0,1\}^4$. And also only look at valid states in the original problem (states that do not invalidate any restrictions). We say, that $s_1$ describes the position of the farmer, $s_2$ the position of the wolf, $s_3$ the position of the goat, and $s_4$ the position of the cabbage. A $"1"$ indicates that the farmer or object is on the starting shore, a $"0"$ indicates that it is on the goal shore. So for example, the state $s=(0,1,0,1)$ describes the state where the farmer and the goat are on the goal shore and the wolf and the cabbage still on the starting shore. \\
+            
+            We can then define a heuristic $h$ that describes the minimal number of passages needed for the farmer to bring every object to the goal shore. 
+            
+            \begin{center}
+                \item $h(n) = 
+                    \begin{cases}
+                        0,& \text{if } n = (0,0,0,0)\\
+                        1,& \text{if } n = (1,0,0,0)\\ 
+                        (1 - n_1) + 2(n_2 + n_3 + n_4) - 1,& \text{otherwise}
+                    \end{cases}$ \\
+            \end{center}
+            
+            \begin{itemize}
+                \item $(1-n_1) = 1$ when the farmer is on the goal shore and thus has to go back and get another object from the starting shore. $(1-n_1) = 0$ if he is already on the starting shore and thus doesn't have to travel back to the starting shore to get another object.
+                \item $2(n_2 + n_3 + n_4) - 1$: for each object he brings from the starting shore he has to travel back except for the last one he brings to the other side.
+            \end{itemize}
+        
+            \item Our heuristic is defined to calculate the optimal number of actions in the simplified search problem. Thus obviously $h(n) = h^*(n)$, and therefore admissible in the simplified search problem. Thus in the original search problem $h(n) \leq h^*(n)$ and therefore admissible.
+        
+            \begin{center}
+                $h(n) \leq c(n,a,n') + h(n')$
+            \end{center}
+        
+            \item We have to show that the triangle equation holds. Because we are counting actions, and the cost of doing one action is $1$, $c(n,a,n') = 1$ for all actions and nodes. This means that for the triangle equation to hold, $h(n')$ can not change by more than $1$ so we have to show $||h(n') - h(n)|| \leq 1$. We can reduce this to two cases:
+            \begin{itemize}
+                \item If just the farmer changes side, everything except $n_1$ is constant. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. \\
+                $||h(n') - h(n)|| = ||(1 - {n'}_1) + 2(n_2 + n_3 + n_4) - 1) - ((1 - n_1) + 2(n_2 + n_3 + n_4) - 1)|| = ||n_1 - {n'}_1|| \leq 1$ \\
+                \item If the farmer and a object $i$ changes side, 
+                everything except $n_1$ and $n_i $ are constant also $n_1 = n_i$ as both change to the same side. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. We choose, $n_i = n_2$, as it is equivalent for any of the other $x_i$ with $1 < i \leq 4$ as they are symmetric. \\
+                $||h(n') - h(n)|| = ||(1 - {n'}_1) + 2({n'}_1 + n_3 + n_4) - 1) - ((1 - n_1) + 2(n_1 + n_3 + n_4) - 1)|| = ||n_1 - {n'}_1 + 2{n'}_1 - 2n_1 || = || {n'}_1 - n_1 || \leq 1$ \\
+            \end{itemize}
+        
+            $\implies ||h(n') - h(n)|| \leq 1 \implies$ the triangle equation holds for $h(n) \implies h(n)$ is consistent.
+        
+            
+        
+        
+        \end{subexercises}
+    \end{exercise}
+
+\begin{exercise}[Informed Search Algorithms: Practice]{2}
+\begin{subexercises}
+\item A* without reopening  \\\\
+The numbers on the nodes denote the order in which they would be expanded.\\
+\begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=8mm,node distance=17pt, scale=0.8}] 
+
+%NODES
+
+\node[roundnode] (basel)  {1 \\ Basel \\ f=38 \\ g=0 \\ h=83};
+\node[roundnode] (olten)[below=of basel] {2 \\ Olten\\ f=99 \\ g=48 \\ h=51};
+\node[roundnode] (baden)  [below=of basel, right=of olten] {4 \\ Baden\\ f=108 \\\ g=70 \\ h=38};
+
+\node[roundnode] (aarau) [below=of olten] {3 \\ Aarau \\ f=106 \\ g=62 \\ h=44};
+\node[roundnode] (basel1) [below=of olten, left=of aarau] {\\ Basel \\ f=179 \\ g=96 \\ h=83};
+\node[roundnode] (luzern) [below=of olten, left=of basel1] {6 \\ Luzern \\ f=124  \\ g=103 \\ h=21};
+
+\node[roundnode] (luzern1) [below=of aarau] {\\ Luzern \\ f=133 \\ g=112 \\ h=21};
+\node[roundnode] (olten1) [below=of aarau, left=of luzern1] {\\ Olten \\ f=127 \\ g=76 \\ h=51};
+\node[roundnode] (baden1) [below=of aarau, right=of luzern1] {\\ Baden \\ f=127 \\ g=89 \\ h=38};
+
+
+%Expand from Baden
+\node[roundnode] (aarau1) [below=of baden] {\\ Aarau \\ f=141 \\ g=97 \\ h=44};
+\node[roundnode] (zurich) [below=of baden, right=of aarau1] {5 \\ Zürich \\ f=117 \\ g=94 \\ h=23};
+\node[roundnode] (basel2) [below=of baden, right=of zurich] {\\ Basel \\ f=223 \\ g=140 \\ h=83};
+
+
+%Expand from Zürich
+\node[roundnode] (baden2) [below=of zurich] {\\ Baden \\ f=156 \\ g=118 \\ h=38};
+\node[roundnode] (zug1) [below=of zurich, right=of baden2] {7 \\ Zug \\ f=126 \\ g=126 \\ h=0};
+
+
+%Expand from Lucerne
+\node[roundnode] (olten2) [below=of luzern] {\\ Olten \\ f=209 \\ g=158 \\ h=51};
+\node[roundnode] (aarau2) [below=of luzern, left=of olten2] {\\ Aarau \\ f=197 \\ g=153 \\ h=44};
+\node[roundnode] (zug) [below=of luzern, left=of aarau2] {\\ Zug \\ f=133 \\  g=133 \\ h=0};
+
+
+%LINES
+\draw[-](basel.south) --(olten.north);
+\draw[-](basel.south) --(baden.north);
+\draw[-](olten.south) --(aarau.north);
+\draw[-](olten.south) --(luzern.north);
+\draw[-](olten.south) --(basel1.north);
+\draw[-](aarau.south) --(olten1.north);
+\draw[-](aarau.south) --(baden1.north);
+\draw[-](aarau.south) --(luzern1.north);
+\draw[-](luzern.south) --(olten2.north);
+\draw[-](luzern.south) --(aarau2.north);
+\draw[-](luzern.south) --(zug.north);
+\draw[-](baden.south) --(aarau1.north);
+\draw[-](baden.south) --(zurich.north);
+\draw[-](baden.south) --(basel2.north);
+\draw[-](zurich.south)--(baden2.north);
+\draw[-](zurich.south)--(zug1.north);
+\
+\end{tikzpicture}
+\item Greedy Best First Search Algorithm \\
+
+\begin{tikzpicture}[roundnode/.style={align=center,ellipse,draw=gray!60,very thick, minimum size=8mm,node distance=15pt}] 
+\node[roundnode] (basel)  {1 \\ Basel \\ h=83};
+\node[roundnode] (olten)[below=of basel] {  \\ Olten \\ h=51};
+\node[roundnode] (baden)  [below=of basel, right=of olten] {2 \\ Baden\\ h=38};
+\draw[-](basel.south) --(olten.north);
+\draw[-](basel.south) --(baden.north);
+
+%Expand from Baden
+\node[roundnode] (aarau1) [below=of baden] {\\ Aarau \\ h=44};
+\node[roundnode] (zurich) [below=of baden, right=of aarau1] {3 \\ Zürich \\ h=23};
+\node[roundnode] (basel2) [below=of baden, right=of zurich] {\\ Basel \\ h=83};
+\draw[-](baden.south) --(aarau1.north);
+\draw[-](baden.south) --(zurich.north);
+\draw[-](baden.south) --(basel2.north);
+
+%Expand from Zürich
+\node[roundnode] (baden2) [below=of zurich] {\\ Baden \\ h=38};
+\node[roundnode] (zug1) [below=of zurich, right=of baden2] {4 \\ Zug \\ h=0};
+\draw[-](zurich.south)--(baden2.north);
+\draw[-](zurich.south)--(zug1.north);
+
+\end{tikzpicture}
+\item Comparison \\
+\\In this case it is visible that the heuristics were chosen well, such that the greedy algorithm was faster while generating less nodes and still arriving to the optimal solution. The Greedy-Best-First-Search Algorithm only guarantees to arrive to a solution, but it is not guaranteed to find the optimal solution, but rather the first one it finds.
+\end{subexercises}   
+\end{exercise}
+\begin{exercise}[Informed Search Programming]{3}
+    \begin{subexercises}
+ 
+        \item [b)] Analysis \\ 
+        \begin{tikzpicture}
+        \begin{axis} [height=8cm,width=9cm,ylabel=Expanded Nodes,xlabel=Amount of Pancakes,legend pos=north west]
+        
+        %Depthfirst
+        \addplot coordinates {(6,95)(7,1482)(8,1418)(9,91592)(10,152212)};
+		%Breadth first       
+        \addplot coordinates {(6,54)(7,1205)(8,1273)(9,4553)(10,18737)};
+        %Weighted A* first  w=1
+        \addplot coordinates {(6,5)(7,16)(8,6)(9,7)(10,9)};
+        %Weighted A* first w=1.2
+        \addplot coordinates {(6,5)(7,9)(8,6)(9,7)(10,8)}; 
+        %Weighted A* first w=1.5
+        \addplot coordinates {(6,5)(7,9)(8,6)(9,7)(10,8)};
+        %Weighted A* first w=2
+        \addplot coordinates {(6,5)(7,9)(8,6)(9,7)(10,8)};
+        \legend{Depth-first,Breadth-first,WA* w=1,WA* w=1.2, WA* w=1.5,WA* w=2}
+        \end{axis}
+        \end{tikzpicture}
+       \begin{tikzpicture}
+        \begin{axis} [height=8cm,width=9cm,ylabel=Generated Nodes,xlabel=Amount of Pancakes,legend pos=north west]
+        
+        %Depthfirst
+        \addplot coordinates {(6,335)(7,5775)(8,7387)(9,478222)(10,1000000)};
+		%Breadth first       
+        \addplot coordinates {(6,192)(7,2908)(8,5062)(9,20823)(10,96233)};
+        %Weighted A* first  w=1
+        \addplot coordinates {(6,17)(7,76)(8,31)(9,43)(10,65)};
+        %Weighted A* first w=1.2
+        \addplot coordinates {(6,17)(7,41)(8,31)(9,43)(10,57)}; 
+        %Weighted A* first w=1.5
+        \addplot coordinates {(6,17)(7,41)(8,31)(9,43)(10,57)};
+        %Weighted A* first w=2
+        \addplot coordinates {(6,17)(7,41)(8,31)(9,43)(10,57)};
+        \legend{Depth-first,Breadth-first,WA* w=1,WA* w=1.2, WA* w=1.5,WA* w=2}
+        \end{axis}
+        \end{tikzpicture}
+        \\
+        It becomes blatantly visible how much more node expansion and node generation is needed depending on what search algorithm is used. The uninformed searches all needed much more expansions and generations, the most noticeable jump becomes is seen soon as the Problem consists of 9 nodes. Breadth-first search seems to be more suited than depth-first search from the given uninformed algorithms. \\\\ The weighted A* algorithms overall performed very similarly over smaller amounts of pancakes, reducing the expansions and generations massively compared to the breadth-first and depth-first search. At this point event the higher weighted algorithms for A* perform giving the optimal solution, the difference between weights starts to show at a higher amount of nodes.
+\\\\        
+     
+        \begin{tikzpicture}
+        \begin{axis} [height=8cm,width=9cm,ylabel=Expanded Nodes,xlabel=Amount of Pancakes,legend pos=north west]
+
+        %Weighted A* first  w=1
+        \addplot coordinates {(20,1894)(30,4685)(40,16893)};
+        %Weighted A* first w=1.2
+        \addplot coordinates {(20,152)(30,124)(40,403)}; 
+        %Weighted A* first w=1.5
+        \addplot coordinates {(20,53)(30,41)(40,89)};
+        %Weighted A* first w=2
+        \addplot coordinates {(20,35)(30,36)(40,54)};
+        \legend{WA* w=1,WA* w=1.2, WA* w=1.5,WA* w=2}
+        \end{axis}
+        \end{tikzpicture}
+       \begin{tikzpicture}
+        \begin{axis} [height=8cm,width=9cm,ylabel=Found Solution of Cost,xlabel=Amount of Pancakes,legend pos=north west]
+
+        %Weighted A* first  w=1
+        \addplot coordinates {(20,21)(30,28)(40,40)};
+        %Weighted A* first w=1.2
+        \addplot coordinates {(20,22)(30,30)(40,43)}; 
+        %Weighted A* first w=1.5
+        \addplot coordinates {(20,23)(30,31)(40,44)};
+        %Weighted A* first w=2
+        \addplot coordinates {(20,23)(30,32)(40,45)};
+        \legend{WA* w=1,WA* w=1.2, WA* w=1.5,WA* w=2}
+        \end{axis}
+        \end{tikzpicture}
+\\        
+        Looking at the weighted A* algorithms with larger input problems, the way weights influence the selected amount of nodes becomes clear: The higher the weight, the greedier becomes the algorithm and in turn the more it will be cost suboptimal,but much faster and considering all the generated nodes that have to be stored it becomes more space efficient as can be seen on the plots. The higher the weight the more it will resemble a Greedy-best-first search since the path cost will have less and less impact. 
+            
+    \end{subexercises}
+\end{exercise}
+
+
+
+\end{document}
