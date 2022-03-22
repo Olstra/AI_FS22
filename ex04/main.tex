@@ -245,7 +245,7 @@
         \end{subexercises}
     \end{exercise}
     
-    \begin{exercise}[Consistencies]{4}
+    \begin{exercise}[Consistencies]{2}
         \begin{subexercises}
             \item[(a)] $ $\\
             \begin{tikzpicture}
@@ -267,6 +267,13 @@
                 \node[state, rectangle, color=white, fill=red, below of=22, align=center] (11) {$1$ \\ $dom(v_3) = \emptyset$};
                 
                 \path[] (22) edge[] node{} (11);
+                
+                
+                 \node[state, color=white, text=black, fill=white, left of=21] (1) {$v_2$};
+                 \node[state, color=white, text=black, fill=white, below of=1] (2) {$v_1$};
+                 
+                 \path[] (1) edge[] node{} (2);
+                 
             \end{tikzpicture}
             \item[(b)] $ $\\
             \begin{itemize}
