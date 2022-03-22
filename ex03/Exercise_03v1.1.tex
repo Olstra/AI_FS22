@@ -15,6 +15,7 @@
 \usepackage{titling}
 \usepackage{etoolbox}
 \usepackage{tikz}
+\usepackage{pgfplots}
 \usetikzlibrary{shapes, arrows, calc, automata, arrows.meta, positioning,decorations.pathmorphing,backgrounds,decorations.markings,decorations.pathreplacing, graphs}
 
 \tikzset{% 
@@ -94,7 +95,7 @@
                 \item If just the farmer changes side, everything except $n_1$ is constant. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. \\
                 $||h(n') - h(n)|| = ||(1 - {n'}_1) + 2(n_2 + n_3 + n_4) - 1) - ((1 - n_1) + 2(n_2 + n_3 + n_4) - 1)|| = ||n_1 - {n'}_1|| \leq 1$ \\
                 \item If the farmer and a object $i$ changes side, 
-                everything except $n_1$ and $n_i $ are constant also $n_1 = n_i$ as both change to the same side. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. We choose, $n_i = n_2$, as it is equivalent for any of the other $x_i$ with $1 < i \leq 4$ as they are symmetric. \\
+                everything except $n_1$ and $n_i $ are constant also $n_1 = n_i$ as both change to the same side. Additionally, $||{n'}_1 - n_1 || \leq 1$ by definition. We choose, $n_i = n_2$, as it is equivalent for any of the other $n_i$ with $1 < i \leq 4$ as they are symmetric. \\
                 $||h(n') - h(n)|| = ||(1 - {n'}_1) + 2({n'}_1 + n_3 + n_4) - 1) - ((1 - n_1) + 2(n_1 + n_3 + n_4) - 1)|| = ||n_1 - {n'}_1 + 2{n'}_1 - 2n_1 || = || {n'}_1 - n_1 || \leq 1$ \\
             \end{itemize}
         
@@ -195,7 +196,77 @@ The numbers on the nodes denote the order in which they would be expanded.\\
     \begin{subexercises}
  
         \item [b)] Analysis \\ 
-       
+        \begin{tikzpicture}
+        \begin{axis} [height=8cm,width=9cm,ylabel=Expanded Nodes,xlabel=Amount of Pancakes,legend pos=north west]
+        
+        %Depthfirst
+        \addplot coordinates {(6,95)(7,1482)(8,1418)(9,91592)(10,152212)};
+		%Breadth first       
+        \addplot coordinates {(6,54)(7,1205)(8,1273)(9,4553)(10,18737)};
+        %Weighted A* first  w=1
+        \addplot coordinates {(6,5)(7,16)(8,6)(9,7)(10,9)};
+        %Weighted A* first w=1.2
+        \addplot coordinates {(6,5)(7,9)(8,6)(9,7)(10,8)}; 
+        %Weighted A* first w=1.5
+        \addplot coordinates {(6,5)(7,9)(8,6)(9,7)(10,8)};
+        %Weighted A* first w=2
+        \addplot coordinates {(6,5)(7,9)(8,6)(9,7)(10,8)};
+        \legend{Depth-first,Breadth-first,WA* w=1,WA* w=1.2, WA* w=1.5,WA* w=2}
+        \end{axis}
+        \end{tikzpicture}
+       \begin{tikzpicture}
+        \begin{axis} [height=8cm,width=9cm,ylabel=Generated Nodes,xlabel=Amount of Pancakes,legend pos=north west]
+        
+        %Depthfirst
+        \addplot coordinates {(6,335)(7,5775)(8,7387)(9,478222)(10,1000000)};
+		%Breadth first       
+        \addplot coordinates {(6,192)(7,2908)(8,5062)(9,20823)(10,96233)};
+        %Weighted A* first  w=1
+        \addplot coordinates {(6,17)(7,76)(8,31)(9,43)(10,65)};
+        %Weighted A* first w=1.2
+        \addplot coordinates {(6,17)(7,41)(8,31)(9,43)(10,57)}; 
+        %Weighted A* first w=1.5
+        \addplot coordinates {(6,17)(7,41)(8,31)(9,43)(10,57)};
+        %Weighted A* first w=2
+        \addplot coordinates {(6,17)(7,41)(8,31)(9,43)(10,57)};
+        \legend{Depth-first,Breadth-first,WA* w=1,WA* w=1.2, WA* w=1.5,WA* w=2}
+        \end{axis}
+        \end{tikzpicture}
+        \\
+        It becomes blatantly visible how much more node expansion and node generation is needed depending on what search algorithm is used. The uninformed searches all needed much more expansions and generations, the most noticeable jump becomes is seen soon as the Problem consists of 9 nodes. Breadth-first search seems to be more suited than depth-first search from the given uninformed algorithms. \\\\ The weighted A* algorithms overall performed very similarly over smaller amounts of pancakes, reducing the expansions and generations massively compared to the breadth-first and depth-first search. At this point event the higher weighted algorithms for A* perform giving the optimal solution, the difference between weights starts to show at a higher amount of nodes.
+\\\\        
+     
+        \begin{tikzpicture}
+        \begin{axis} [height=8cm,width=9cm,ylabel=Expanded Nodes,xlabel=Amount of Pancakes,legend pos=north west]
+
+        %Weighted A* first  w=1
+        \addplot coordinates {(20,1894)(30,4685)(40,16893)};
+        %Weighted A* first w=1.2
+        \addplot coordinates {(20,152)(30,124)(40,403)}; 
+        %Weighted A* first w=1.5
+        \addplot coordinates {(20,53)(30,41)(40,89)};
+        %Weighted A* first w=2
+        \addplot coordinates {(20,35)(30,36)(40,54)};
+        \legend{WA* w=1,WA* w=1.2, WA* w=1.5,WA* w=2}
+        \end{axis}
+        \end{tikzpicture}
+       \begin{tikzpicture}
+        \begin{axis} [height=8cm,width=9cm,ylabel=Found Solution of Cost,xlabel=Amount of Pancakes,legend pos=north west]
+
+        %Weighted A* first  w=1
+        \addplot coordinates {(20,21)(30,28)(40,40)};
+        %Weighted A* first w=1.2
+        \addplot coordinates {(20,22)(30,30)(40,43)}; 
+        %Weighted A* first w=1.5
+        \addplot coordinates {(20,23)(30,31)(40,44)};
+        %Weighted A* first w=2
+        \addplot coordinates {(20,23)(30,32)(40,45)};
+        \legend{WA* w=1,WA* w=1.2, WA* w=1.5,WA* w=2}
+        \end{axis}
+        \end{tikzpicture}
+\\        
+        Looking at the weighted A* algorithms with larger input problems, the way weights influence the selected amount of nodes becomes clear: The higher the weight, the greedier becomes the algorithm and in turn the more it will be cost suboptimal,but much faster and considering all the generated nodes that have to be stored it becomes more space efficient as can be seen on the plots. The higher the weight the more it will resemble a Greedy-best-first search since the path cost will have less and less impact. 
+            
     \end{subexercises}
 \end{exercise}
 
